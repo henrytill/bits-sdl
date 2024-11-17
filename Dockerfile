@@ -8,10 +8,10 @@ RUN useradd -m build -u 1000 -U -s /bin/bash
 
 USER build
 
-RUN mkdir -p /home/build/sdl-bits
+RUN mkdir -p /home/build/bits-sdl
 
-WORKDIR /home/build/sdl-bits
+WORKDIR /home/build/bits-sdl
 
-COPY --chown=build:build . /home/build/sdl-bits/
+COPY --chown=build:build . /home/build/bits-sdl/
 
 RUN make

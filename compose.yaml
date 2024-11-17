@@ -15,12 +15,12 @@ services:
     cap_add:
       - SYS_NICE
       - SYS_RESOURCE
-    working_dir: /home/build/sdl-bits
+    working_dir: /home/build/bits-sdl
     command: ./_bin/main
 
   test:
     build:
       context: .
       dockerfile: ./Dockerfile
-    working_dir: /home/build/sdl-bits
+    working_dir: /home/build/bits-sdl
     command: make check

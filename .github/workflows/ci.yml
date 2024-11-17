@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  TEST_TAG: henrytill/sdl-bits:test
+  TEST_TAG: henrytill/bits-sdl:test
 
 jobs:
   ubuntu:
@@ -56,7 +56,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Test
-        run: docker run --rm --tty --workdir /home/build/sdl-bits ${{env.TEST_TAG}} make check
+        run: docker run --rm --tty --workdir /home/build/bits-sdl ${{env.TEST_TAG}} make check
 
   windows:
     runs-on: windows-latest
