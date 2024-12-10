@@ -24,7 +24,7 @@ OBJECTS += src/generate_test_bmp.o
 OBJECTS += src/get_displays.o
 OBJECTS += src/library_versions.o
 OBJECTS += src/main.o
-OBJECTS += src/message_queue_sdl.o
+OBJECTS += src/message_queue.o
 OBJECTS += test/bmp_read_bitmap.o
 OBJECTS += test/bmp_read_bitmap_v4.o
 OBJECTS += test/message_queue_basic.o
@@ -57,7 +57,7 @@ src/library_versions.o: CFLAGS += $(FREETYPE_CFLAGS) $(LUA_CFLAGS) $(SDL_CFLAGS)
 
 src/main.o: CFLAGS += $(LUA_CFLAGS) $(SDL_CFLAGS)
 
-src/message_queue_sdl.o: CFLAGS += $(SDL_CFLAGS)
+src/message_queue.o: CFLAGS += $(SDL_CFLAGS)
 
 $(BINOUT)/generate_atlas_from_bdf: LDLIBS += -lm $(FREETYPE_LDLIBS)
 $(BINOUT)/generate_atlas_from_bdf: src/generate_atlas_from_bdf.o src/bmp.o
@@ -80,7 +80,7 @@ $(BINOUT)/library_versions: src/library_versions.o
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BINOUT)/main: LDLIBS += -lm $(LUA_LDLIBS) $(SDL_LDLIBS)
-$(BINOUT)/main: src/main.o src/message_queue_sdl.o
+$(BINOUT)/main: src/main.o src/message_queue.o
 	@mkdir -p -- $(BINOUT)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
