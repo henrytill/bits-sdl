@@ -2,25 +2,25 @@
 #define SDL_BITS_INCLUDE_MACRO_H
 
 #ifndef NDEBUG
-#    define DEBUG
+#  define DEBUG
 #endif
 
 // General
 
 #ifdef DEBUG
-#    define debug_printf(fmt, ...) (void)printf(fmt, ##__VA_ARGS__)
+#  define debug_printf(fmt, ...) (void)printf(fmt, ##__VA_ARGS__)
 #else
-#    define debug_printf(fmt, ...)
+#  define debug_printf(fmt, ...)
 #endif
 
 // Cleanup
 
-#define AT_EXIT(func)                                            \
-    do {                                                         \
-        if (atexit(func) != 0) {                                 \
-            (void)fprintf(stderr, "atexit(%s) failed\n", #func); \
-            exit(EXIT_FAILURE);                                  \
-        }                                                        \
-    } while (0)
+#define AT_EXIT(func)                                      \
+  do {                                                     \
+    if (atexit(func) != 0) {                               \
+      (void)fprintf(stderr, "atexit(%s) failed\n", #func); \
+      exit(EXIT_FAILURE);                                  \
+    }                                                      \
+  } while (0)
 
 #endif // SDL_BITS_INCLUDE_MACRO_H
