@@ -25,7 +25,7 @@ jobs:
           key: ${{ github.job }}-${{ matrix.os }}-${{ matrix.compiler }}
       - name: Install dependencies
         run: |
-          sudo apt install -yyq --no-install-recommends \
+          sudo apt-get update -yqq && sudo apt-get install -yyq --no-install-recommends \
             libdrm-dev libgbm-dev \
             libsdl2-dev libfreetype-dev \
             liblua5.1-0-dev
