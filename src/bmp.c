@@ -2,13 +2,9 @@
 
 #include <assert.h>
 #include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-enum {
-  DWORD_BITS = 32,
-  DWORD_BYTES = 4,
-};
 
 static const uint16_t FILE_TYPE = 0x4D42;
 static const uint32_t BI_BITFIELDS = 0x0003;
@@ -16,11 +12,16 @@ static const uint32_t LCS_WINDOWS_COLOR_SPACE = 0x57696E20;
 
 static const size_t V4_DATA_OFFSET = sizeof(bmp_file_header) + sizeof(bmp_v4_header);
 
-size_t bmp_row_size(uint16_t bits_per_pixel, int32_t width) {
+size_t bmp_row_size(double bits_per_pixel, double width) {
   assert(bits_per_pixel > 0);
   assert(width > 0);
-  const double pixel_bits = (double)bits_per_pixel * width;
-  return (size_t)(ceil(pixel_bits / DWORD_BITS)) * DWORD_BYTES;
+  const double pixel_bits = bits_per_pixel * width;
+  const double dword_bits = 32;
+  const double dword_bytes = 4;
+  const double ret = ceil(pixel_bits / dword_bits) * dword_bytes;
+  assert(ret > 0);
+  assert(ret <= (double)SIZE_MAX);
+  return (size_t)ret;
 }
 
 int bmp_read(const char *file, bmp_file_header *file_header, bmp_info_header *info_header, char **image) {

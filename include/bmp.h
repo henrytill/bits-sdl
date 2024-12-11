@@ -89,7 +89,7 @@ typedef struct bmp_pixel32 {
 /// @param bits_per_pixel Bits per pixel.
 /// @param width Image width.
 /// @return Number of bytes per row.
-size_t bmp_row_size(uint16_t bits_per_pixel, int32_t width);
+size_t bmp_row_size(double bits_per_pixel, double width);
 
 /// Reads a BMP file.
 ///
