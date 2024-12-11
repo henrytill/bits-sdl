@@ -19,8 +19,6 @@ static const bmp_pixel32 BUF[] = {
 };
 
 int main(int argc, char *argv[]) {
-  extern const bmp_pixel32 BUF[];
-
   if (argc != 2) {
     return EXIT_FAILURE;
   }

@@ -169,11 +169,6 @@ static inline void draw_image(__attribute__((unused)) const char *image,
 #endif
 
 int main(void) {
-  extern const char *const FONT_FILE;
-  extern const char *const BMP_FILE;
-  extern const bmp_pixel32 WHITE;
-  extern const bmp_pixel32 BLACK;
-
   int ret = EXIT_FAILURE;
 
   char codes[CODES_SIZE] = {0};

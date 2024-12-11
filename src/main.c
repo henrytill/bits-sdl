@@ -212,8 +212,8 @@ static void calc_sine(void *userdata, uint8_t *stream, int len) {
     const double time = (double)(offset + i) / sample_rate;
     const double x = 2.0 * M_PI * time * as->frequency;
     const double y = as->volume * sin(x);
-    fstream[AUDIO_NUM_CHANNELS * i + 0] = (float)y;
-    fstream[AUDIO_NUM_CHANNELS * i + 1] = (float)y;
+    fstream[(AUDIO_NUM_CHANNELS * i) + 0] = (float)y;
+    fstream[(AUDIO_NUM_CHANNELS * i) + 1] = (float)y;
   }
   as->elapsed += 1;
 }
@@ -223,8 +223,6 @@ static void calc_sine(void *userdata, uint8_t *stream, int len) {
 /// @param frame_rate The frame rate
 /// @return The time in milliseconds for a frame
 static double calc_frame_time(const int frame_rate) {
-  extern const double SECOND;
-
   assert((double)frame_rate > 0);
   return SECOND / (double)frame_rate;
 }
@@ -235,9 +233,6 @@ static double calc_frame_time(const int frame_rate) {
 /// @param end A final timestamp in ticks
 /// @return The time in milliseconds between the two timestamps
 static double calc_delta(const uint64_t begin, const uint64_t end) {
-  extern const double SECOND;
-  extern uint64_t perf_freq;
-
   assert(begin <= end);
   assert((double)perf_freq > 0);
   const double delta_ticks = (double)(end - begin);
@@ -267,9 +262,6 @@ static void delay_frame(const double frame_time, const uint64_t begin) {
 /// @param win The window to initialize.
 /// @return 0 on success, -1 on failure.
 static int window_init(struct config *cfg, const char *title, struct window *win) {
-  extern const uint32_t WINDOW_TYPE_FLAGS[];
-  extern const char *const WINDOW_TYPE_STR[];
-
   SDL_LogInfo(APP, "Window type: %s", WINDOW_TYPE_STR[cfg->window_type]);
   win->window = SDL_CreateWindow(title,
                                  cfg->x, cfg->y,
@@ -415,6 +407,8 @@ static void handle_keydown(SDL_KeyboardEvent *key, struct state *st) {
     st->audio.elapsed = 0;
     SDL_UnlockAudioDevice(st->audio_device);
     break;
+  default:
+    break;
   }
 }
 
@@ -441,6 +435,8 @@ static void handle_events(struct state *st) {
       break;
     case EVENT_0:
       handle_user(&event.user, st);
+      break;
+    default:
       break;
     }
   }
@@ -469,23 +465,11 @@ static int render(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *win_re
   return 0;
 }
 
-int main(int argc, char *argv[]) {
-  extern uint64_t perf_freq;
-  extern struct args as;
-  extern struct config cfg;
-  extern struct state st;
-  extern const uint32_t QUEUE_CAP;
-
-  int ret = EXIT_FAILURE;
-
-  SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
-  (void)parse_args(argc, argv, &as);
-  (void)load_config(as.config_file, &cfg);
-
+int init(void) {
   int rc = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
   if (rc != 0) {
     log_sdl_error("init failed");
-    return EXIT_FAILURE;
+    return -1;
   }
 
   AT_EXIT(SDL_Quit);
@@ -495,7 +479,7 @@ int main(int argc, char *argv[]) {
   const uint32_t event_start = SDL_RegisterEvents(EVENT_MAX - EVENT_0);
   if (event_start == (uint32_t)-1) {
     log_sdl_error("SDL_RegisterEvents failed");
-    return EXIT_FAILURE;
+    return -1;
   }
   assert(event_start == EVENT_0);
 
@@ -511,6 +495,23 @@ int main(int argc, char *argv[]) {
   st.audio_device = SDL_OpenAudioDevice(NULL, 0, &want, &have, 0);
   if (st.audio_device < 2) {
     log_sdl_error("SDL_OpenAudio failed");
+    return -1;
+  }
+
+  SDL_PauseAudioDevice(st.audio_device, 0);
+
+  return 0;
+}
+
+int main(int argc, char *argv[]) {
+  int ret = EXIT_FAILURE;
+
+  SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
+  (void)parse_args(argc, argv, &as);
+  (void)load_config(as.config_file, &cfg);
+
+  int rc = init();
+  if (rc != 0) {
     return EXIT_FAILURE;
   }
 
@@ -549,8 +550,6 @@ int main(int argc, char *argv[]) {
   }
 
   const double frame_time = calc_frame_time(cfg.frame_rate);
-
-  SDL_PauseAudioDevice(st.audio_device, 0);
 
   double delta = frame_time;
   uint64_t begin = now();
