@@ -465,6 +465,10 @@ static int render(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *win_re
   return 0;
 }
 
+/// Initializes SDL with video and audio subsystems, sets up audio
+/// device, and registers events.
+///
+/// @return 0 on success, -1 on failure
 int init(void) {
   int rc = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
   if (rc != 0) {
