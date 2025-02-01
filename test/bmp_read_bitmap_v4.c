@@ -26,10 +26,10 @@ int main(int argc, char *argv[]) {
   }
 
   bmp_pixel32 expected = {
-    .b = 255,
-    .g = 0,
-    .r = 0,
-    .a = 127,
+      .b = 255,
+      .g = 0,
+      .r = 0,
+      .a = 127,
   };
 
   if (memcmp(&expected, (bmp_pixel32 *)image, sizeof(bmp_pixel32)) != 0) {

@@ -43,13 +43,13 @@ enum {
 
 static const uint32_t WINDOW_TYPE_FLAGS[] = {
 #define X(variant, i, flags, str) [variant] = (flags),
-  WINDOW_TYPE_VARIANTS
+    WINDOW_TYPE_VARIANTS
 #undef X
 };
 
 static const char *const WINDOW_TYPE_STR[] = {
 #define X(variant, i, flags, str) [variant] = (str),
-  WINDOW_TYPE_VARIANTS
+    WINDOW_TYPE_VARIANTS
 #undef X
 };
 
@@ -93,27 +93,27 @@ static uint64_t perf_freq = 0;
 static struct args as = {.config_file = "config.lua"};
 
 static struct config cfg = {
-  .window_type = WINDOWED,
-  .x = CENTERED,
-  .y = CENTERED,
-  .width = 1280,
-  .height = 720,
-  .frame_rate = 60,
-  .asset_dir = "./assets",
+    .window_type = WINDOWED,
+    .x = CENTERED,
+    .y = CENTERED,
+    .width = 1280,
+    .height = 720,
+    .frame_rate = 60,
+    .asset_dir = "./assets",
 };
 
 static struct state st = {
-  .audio_device = 0,
-  .audio = {
-    .sample_rate = 48000,
-    .buffer_size = 2048,
-    .frequency = 440.0,
-    .max_volume = 0.25,
-    .volume = 0.0,
-    .elapsed = 0,
-  },
-  .loop_stat = 1,
-  .tone_stat = 0,
+    .audio_device = 0,
+    .audio = {
+        .sample_rate = 48000,
+        .buffer_size = 2048,
+        .frequency = 440.0,
+        .max_volume = 0.25,
+        .volume = 0.0,
+        .elapsed = 0,
+    },
+    .loop_stat = 1,
+    .tone_stat = 0,
 };
 
 /// Parses command line arguments and populates args with the results.
@@ -374,12 +374,12 @@ static int handle(void *data) {
   (void)queue;
 
   SDL_Event event = {
-    .user = {
-      .type = EVENT_0,
-      .code = 0,
-      .data1 = NULL,
-      .data2 = NULL,
-    },
+      .user = {
+          .type = EVENT_0,
+          .code = 0,
+          .data1 = NULL,
+          .data2 = NULL,
+      },
   };
   const int rc = SDL_PushEvent(&event);
   if (rc == 0) {
@@ -488,12 +488,12 @@ int init(void) {
   assert(event_start == EVENT_0);
 
   SDL_AudioSpec want = {
-    .freq = st.audio.sample_rate,
-    .format = AUDIO_F32,
-    .channels = 2,
-    .samples = st.audio.buffer_size,
-    .callback = calc_sine,
-    .userdata = (void *)&st.audio,
+      .freq = st.audio.sample_rate,
+      .format = AUDIO_F32,
+      .channels = 2,
+      .samples = st.audio.buffer_size,
+      .callback = calc_sine,
+      .userdata = (void *)&st.audio,
   };
   SDL_AudioSpec have = {0};
   st.audio_device = SDL_OpenAudioDevice(NULL, 0, &want, &have, 0);

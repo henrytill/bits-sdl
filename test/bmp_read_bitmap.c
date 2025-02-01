@@ -25,9 +25,9 @@ int main(int argc, char *argv[]) {
   }
 
   bmp_pixel24 expected = {
-    .b = 0,
-    .g = 0,
-    .r = 255,
+      .b = 0,
+      .g = 0,
+      .r = 255,
   };
 
   if (memcmp(&expected, (bmp_pixel24 *)image, sizeof(bmp_pixel24)) != 0) {
