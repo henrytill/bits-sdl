@@ -20,7 +20,7 @@ ContinuationIndentWidth: 4
 DerivePointerAlignment: false
 FixNamespaceComments: true
 IndentCaseLabels: false
-IndentCaseBlocks: true
+IndentCaseBlocks: false
 IndentPPDirectives: AfterHash
 IndentWidth: 2
 ObjCBlockIndentWidth: 2
