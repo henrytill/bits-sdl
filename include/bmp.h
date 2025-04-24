@@ -98,7 +98,7 @@ size_t bmp_row_size(double bits_per_pixel, double width);
 /// @param info_header The info header structure to be filled.
 /// @param image The image data to be filled.
 /// @return 0 on success, -1 on error.
-int bmp_read(const char *file, bmp_file_header *file_header, bmp_info_header *info_header, char **image);
+int bmp_read(char const *file, bmp_file_header *file_header, bmp_info_header *info_header, char **image);
 
 /// Reads a BMP file with a V4 header.
 ///
@@ -107,7 +107,7 @@ int bmp_read(const char *file, bmp_file_header *file_header, bmp_info_header *in
 /// @param v4_header The V4 header structure to be filled.
 /// @param image The image data to be filled.
 /// @return 0 on success, -1 on error.
-int bmp_v4_read(const char *file, bmp_file_header *file_header, bmp_v4_header *v4_header, char **image);
+int bmp_v4_read(char const *file, bmp_file_header *file_header, bmp_v4_header *v4_header, char **image);
 
 /// Writes a BMP file with a V4 header.
 ///
@@ -115,6 +115,6 @@ int bmp_v4_read(const char *file, bmp_file_header *file_header, bmp_v4_header *v
 /// @param width Image width in pixels.
 /// @param height Image height in pixels.
 /// @param file Path to the BMP file
-int bmp_v4_write(const bmp_pixel32 *buffer, size_t width, size_t height, const char *file);
+int bmp_v4_write(bmp_pixel32 const *buffer, size_t width, size_t height, char const *file);
 
 #endif // SDL_BITS_INCLUDE_BMP_H

@@ -3,9 +3,9 @@
 #include "macro.h"
 
 static int log_current_mode(int i, SDL_DisplayMode *mode) {
-  const int rc = SDL_GetCurrentDisplayMode(i, mode);
+  int const rc = SDL_GetCurrentDisplayMode(i, mode);
   if (rc != 0) {
-    const char *err = SDL_GetError();
+    char const *err = SDL_GetError();
     SDL_Log("Failed to get mode for display #%d: %s", i, err);
     return -1;
   }
@@ -14,9 +14,9 @@ static int log_current_mode(int i, SDL_DisplayMode *mode) {
 }
 
 static int log_display_modes(void) {
-  const int num_displays = SDL_GetNumVideoDisplays();
+  int const num_displays = SDL_GetNumVideoDisplays();
   if (num_displays < 0) {
-    const char *err = SDL_GetError();
+    char const *err = SDL_GetError();
     SDL_Log("Failed to get number of video displays: %s", err);
     return -1;
   }

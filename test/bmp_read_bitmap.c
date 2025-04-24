@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  const char *bmp_file = argv[1];
+  char const *bmp_file = argv[1];
 
   if (bmp_read(bmp_file, &file_header, &info_header, &image) != 0) {
     return EXIT_FAILURE;

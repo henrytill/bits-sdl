@@ -7,7 +7,7 @@ enum {
   HEIGHT = 2,
 };
 
-static const bmp_pixel32 BUF[] = {
+static bmp_pixel32 const BUF[] = {
     {0xFF, 0x00, 0x00, 0x7F},
     {0x00, 0xFF, 0x00, 0x7F},
     {0x00, 0x00, 0xFF, 0x7F},
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  const char *bmp_file = argv[1];
+  char const *bmp_file = argv[1];
 
   return (bmp_v4_write(BUF, WIDTH, HEIGHT, bmp_file) == 0)
              ? EXIT_SUCCESS

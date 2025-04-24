@@ -17,7 +17,7 @@ enum message_queue_failure {
   MSGQ_FAILURE_MIN = 10,
 };
 
-static inline const char *message_queue_failure_str(enum message_queue_failure failure) {
+static inline char const *message_queue_failure_str(enum message_queue_failure failure) {
   switch (failure) {
   case MSGQ_FAILURE_NULL_POINTER:
     return "NULL pointer";
@@ -49,7 +49,7 @@ enum message_tag {
   MSG_TAG_QUIT = 2,
 };
 
-static inline const char *message_tag_str(enum message_tag tag) {
+static inline char const *message_tag_str(enum message_tag tag) {
   switch (tag) {
   case MSG_TAG_NONE:
     return "NONE";
@@ -74,13 +74,13 @@ struct message_queue;
 ///
 /// @param rc A return code.
 /// @return The error message associated with the given return code, or NULL if the return code is invalid.
-const char *message_queue_failure(int rc);
+char const *message_queue_failure(int rc);
 
 /// Return the tag string associated with a message tag.
 ///
 /// @param tag A message tag.
 /// @return The tag string associated with the given tag, or NULL if the tag is invalid.
-const char *message_queue_tag(int tag);
+char const *message_queue_tag(int tag);
 
 /// Creates a new bounded queue with the given capacity.
 ///

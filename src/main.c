@@ -41,13 +41,13 @@ enum {
 #undef X
 };
 
-static const uint32_t WINDOW_TYPE_FLAGS[] = {
+static uint32_t const WINDOW_TYPE_FLAGS[] = {
 #define X(variant, i, flags, str) [variant] = (flags),
     WINDOW_TYPE_VARIANTS
 #undef X
 };
 
-static const char *const WINDOW_TYPE_STR[] = {
+static char const *const WINDOW_TYPE_STR[] = {
 #define X(variant, i, flags, str) [variant] = (str),
     WINDOW_TYPE_VARIANTS
 #undef X
@@ -64,10 +64,10 @@ struct config {
 };
 
 struct audio_state {
-  const int sample_rate;      // Samples per second
-  const uint16_t buffer_size; // Samples per buffer
-  const double frequency;     // Frequency of the sine wave
-  const double max_volume;    // Maximum volume
+  int const sample_rate;      // Samples per second
+  uint16_t const buffer_size; // Samples per buffer
+  double const frequency;     // Frequency of the sine wave
+  double const max_volume;    // Maximum volume
   double volume;              // Current volume, 0.0 to max_volume
   uint64_t elapsed;           // Number of buffer fills
 };
@@ -84,9 +84,9 @@ struct window {
   SDL_Renderer *renderer;
 };
 
-static const double SECOND = 1000.0;
+static double const SECOND = 1000.0;
 
-static const uint32_t QUEUE_CAP = 4U;
+static uint32_t const QUEUE_CAP = 4U;
 
 static uint64_t perf_freq = 0;
 
@@ -140,8 +140,8 @@ static int parse_args(int argc, char *argv[], struct args *as) {
 /// @param a The first path
 /// @param b The second path
 /// @return A new path, or NULL on failure
-static char *joinpath2(const char *a, const char *b) {
-  const char separator = '/';
+static char *joinpath2(char const *a, char const *b) {
+  char const separator = '/';
   size_t len = (size_t)snprintf(NULL, 0, "%s%c%s", a, separator, b);
   char *ret = ecalloc(++len, sizeof(*ret)); // incr for terminator
   (void)snprintf(ret, len, "%s%c%s", a, separator, b);
@@ -153,7 +153,7 @@ static char *joinpath2(const char *a, const char *b) {
 /// @param file The config file to load
 /// @param cfg The config struct to populate
 /// @return 0 on success, -1 on failure
-static int load_config(const char *file, struct config *cfg) {
+static int load_config(char const *file, struct config *cfg) {
   int ret = -1;
   lua_State *state = luaL_newstate();
   if (state == NULL) {
@@ -204,14 +204,14 @@ static void calc_sine(void *userdata, uint8_t *stream, int len) {
   assert((len / ((int)sizeof(*fstream) * AUDIO_NUM_CHANNELS)) == as->buffer_size);
   (void)len;
 
-  const double sample_rate = (double)as->sample_rate;
-  const uint64_t buffer_size = (uint64_t)as->buffer_size;
-  const uint64_t offset = as->elapsed * buffer_size;
+  double const sample_rate = (double)as->sample_rate;
+  uint64_t const buffer_size = (uint64_t)as->buffer_size;
+  uint64_t const offset = as->elapsed * buffer_size;
 
   for (uint64_t i = 0; i < buffer_size; ++i) {
-    const double time = (double)(offset + i) / sample_rate;
-    const double x = 2.0 * M_PI * time * as->frequency;
-    const double y = as->volume * sin(x);
+    double const time = (double)(offset + i) / sample_rate;
+    double const x = 2.0 * M_PI * time * as->frequency;
+    double const y = as->volume * sin(x);
     fstream[(AUDIO_NUM_CHANNELS * i) + 0] = (float)y;
     fstream[(AUDIO_NUM_CHANNELS * i) + 1] = (float)y;
   }
@@ -222,7 +222,7 @@ static void calc_sine(void *userdata, uint8_t *stream, int len) {
 ///
 /// @param frame_rate The frame rate
 /// @return The time in milliseconds for a frame
-static double calc_frame_time(const int frame_rate) {
+static double calc_frame_time(int const frame_rate) {
   assert((double)frame_rate > 0);
   return SECOND / (double)frame_rate;
 }
@@ -232,10 +232,10 @@ static double calc_frame_time(const int frame_rate) {
 /// @param begin An initial timestamp in ticks
 /// @param end A final timestamp in ticks
 /// @return The time in milliseconds between the two timestamps
-static double calc_delta(const uint64_t begin, const uint64_t end) {
+static double calc_delta(uint64_t const begin, uint64_t const end) {
   assert(begin <= end);
   assert((double)perf_freq > 0);
-  const double delta_ticks = (double)(end - begin);
+  double const delta_ticks = (double)(end - begin);
   return (delta_ticks * SECOND) / (double)perf_freq;
 }
 
@@ -243,12 +243,12 @@ static double calc_delta(const uint64_t begin, const uint64_t end) {
 ///
 /// @param frame_time The desired time in milliseconds for a frame
 /// @param begin The timestamp in ticks when the frame started
-static void delay_frame(const double frame_time, const uint64_t begin) {
+static void delay_frame(double const frame_time, uint64_t const begin) {
   assert(frame_time > 0);
   if (calc_delta(begin, now()) >= frame_time) {
     return;
   }
-  const uint32_t time = (uint32_t)(frame_time - calc_delta(begin, now()) - 1.0);
+  uint32_t const time = (uint32_t)(frame_time - calc_delta(begin, now()) - 1.0);
   if (time > 0) {
     SDL_Delay(time);
   }
@@ -261,7 +261,7 @@ static void delay_frame(const double frame_time, const uint64_t begin) {
 /// @param title The window title.
 /// @param win The window to initialize.
 /// @return 0 on success, -1 on failure.
-static int window_init(struct config *cfg, const char *title, struct window *win) {
+static int window_init(struct config *cfg, char const *title, struct window *win) {
   SDL_LogInfo(APP, "Window type: %s", WINDOW_TYPE_STR[cfg->window_type]);
   win->window = SDL_CreateWindow(title,
                                  cfg->x, cfg->y,
@@ -277,7 +277,7 @@ static int window_init(struct config *cfg, const char *title, struct window *win
     log_sdl_error("SDL_CreateRenderer failed");
     return -1;
   }
-  const int rc = SDL_SetRenderDrawColor(win->renderer, 0x00, 0x00, 0x00, 0xFF);
+  int const rc = SDL_SetRenderDrawColor(win->renderer, 0x00, 0x00, 0x00, 0xFF);
   if (rc != 0) {
     SDL_DestroyWindow(win->window);
     SDL_DestroyRenderer(win->renderer);
@@ -307,9 +307,9 @@ static void window_finish(struct window *win) {
 /// @param cfg The configuration.
 /// @param title The window title.
 /// @return The window on success, NULL on failure.
-static struct window *window_create(struct config *cfg, const char *title) {
+static struct window *window_create(struct config *cfg, char const *title) {
   struct window *win = emalloc(sizeof(*win));
-  const int rc = window_init(cfg, title, win);
+  int const rc = window_init(cfg, title, win);
   if (rc != 0) {
     free(win);
     return NULL;
@@ -337,7 +337,7 @@ static int get_rect(struct window *win, SDL_Rect *rect) {
   if (win == NULL || win->renderer == NULL) {
     return -1;
   }
-  const int rc = SDL_GetRendererOutputSize(win->renderer, &rect->w, &rect->h);
+  int const rc = SDL_GetRendererOutputSize(win->renderer, &rect->w, &rect->h);
   if (rc != 0) {
     log_sdl_error("SDL_GetRendererOutputSize failed");
     return -1;
@@ -350,7 +350,7 @@ static int get_rect(struct window *win, SDL_Rect *rect) {
 /// @param win The window.
 /// @param path The path to the bitmap file.
 /// @return The texture on success, NULL on failure.
-static SDL_Texture *create_texture(struct window *win, const char *path) {
+static SDL_Texture *create_texture(struct window *win, char const *path) {
   SDL_Surface *surface = SDL_LoadBMP(path);
   if (surface == NULL) {
     log_sdl_error("SDL_LoadBMP failed");
@@ -381,7 +381,7 @@ static int handle(void *data) {
           .data2 = NULL,
       },
   };
-  const int rc = SDL_PushEvent(&event);
+  int const rc = SDL_PushEvent(&event);
   if (rc == 0) {
     SDL_LogDebug(APP, "SDL_PushEvent filtered");
   } else if (rc < 0) {
@@ -480,7 +480,7 @@ int init(void) {
 
   perf_freq = SDL_GetPerformanceFrequency();
 
-  const uint32_t event_start = SDL_RegisterEvents(EVENT_MAX - EVENT_0);
+  uint32_t const event_start = SDL_RegisterEvents(EVENT_MAX - EVENT_0);
   if (event_start == (uint32_t)-1) {
     log_sdl_error("SDL_RegisterEvents failed");
     return -1;
@@ -519,7 +519,7 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  const char *const win_title = "Hello, world!";
+  char const *const win_title = "Hello, world!";
   struct window *win = window_create(&cfg, win_title);
   if (win == NULL) {
     goto out_close_audio_device;
@@ -531,7 +531,7 @@ int main(int argc, char *argv[]) {
     goto out_destroy_window;
   }
 
-  const char *const test_bmp = "test.bmp";
+  char const *const test_bmp = "test.bmp";
   char *bmp_file = joinpath2(cfg.asset_dir, test_bmp);
   if (bmp_file == NULL) {
     goto out_destroy_window;
@@ -553,7 +553,7 @@ int main(int argc, char *argv[]) {
     goto out_message_queue_destroy;
   }
 
-  const double frame_time = calc_frame_time(cfg.frame_rate);
+  double const frame_time = calc_frame_time(cfg.frame_rate);
 
   double delta = frame_time;
   uint64_t begin = now();

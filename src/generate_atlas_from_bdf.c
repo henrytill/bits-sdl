@@ -64,19 +64,19 @@ enum {
   CODES_SIZE = (HIGH - LOW) + 1,
 };
 
-static const char *const FONT_FILE = "./assets/ucs-fonts/10x20.bdf";
-static const char *const BMP_FILE = "./assets/10x20.bmp";
+static char const *const FONT_FILE = "./assets/ucs-fonts/10x20.bdf";
+static char const *const BMP_FILE = "./assets/10x20.bmp";
 
-static const bmp_pixel32 WHITE = {0xFF, 0xFF, 0xFF, 0x00};
-static const bmp_pixel32 BLACK = {0x00, 0x00, 0x00, 0xFF};
+static bmp_pixel32 const WHITE = {0xFF, 0xFF, 0xFF, 0x00};
+static bmp_pixel32 const BLACK = {0x00, 0x00, 0x00, 0xFF};
 
 // https://freetype.org/freetype2/docs/reference/ft2-basic_types.html#ft_bitmap
-static void render_bitmap_char(FT_GlyphSlot slot, char *target, const size_t code_size, const size_t offset) {
-  const unsigned char *buffer = slot->bitmap.buffer;
-  const size_t rows = (size_t)slot->bitmap.rows;
-  const size_t width = (size_t)slot->bitmap.width;
-  const size_t pitch = (size_t)abs(slot->bitmap.pitch);
-  const size_t stride = width * code_size;
+static void render_bitmap_char(FT_GlyphSlot slot, char *target, size_t const code_size, size_t const offset) {
+  unsigned char const *buffer = slot->bitmap.buffer;
+  size_t const rows = (size_t)slot->bitmap.rows;
+  size_t const width = (size_t)slot->bitmap.width;
+  size_t const pitch = (size_t)abs(slot->bitmap.pitch);
+  size_t const stride = width * code_size;
 
   assert(width == WIDTH);
 
@@ -93,7 +93,7 @@ static void render_bitmap_char(FT_GlyphSlot slot, char *target, const size_t cod
   }
 }
 
-static int render_bitmap_chars(FT_Face face, const char codes[CODES_SIZE], char *image) {
+static int render_bitmap_chars(FT_Face face, char const codes[CODES_SIZE], char *image) {
   int rc = FT_Set_Pixel_Sizes(face, WIDTH, HEIGHT);
   if (rc != 0) {
     eprintf("FT_Set_Pixel_Sizes failed.  Error code: %d", rc);
@@ -121,7 +121,7 @@ static int render_bitmap_chars(FT_Face face, const char codes[CODES_SIZE], char 
   return 0;
 }
 
-static int render_chars(const char codes[CODES_SIZE], char *image) {
+static int render_chars(char const codes[CODES_SIZE], char *image) {
   int ret = -1;
 
   FT_Library lib = NULL;
@@ -152,7 +152,7 @@ out_done_lib:
 }
 
 #ifdef DRAW_IMAGE
-static void draw_image(const char *image, const size_t width, const size_t height) {
+static void draw_image(char const *image, size_t const width, size_t const height) {
   for (size_t y = 0; y < height; ++y) {
     printf("%2zd|", y);
     for (size_t x = 0; x < width; ++x) {
@@ -162,9 +162,9 @@ static void draw_image(const char *image, const size_t width, const size_t heigh
   }
 }
 #else
-static inline void draw_image(__attribute__((unused)) const char *image,
-                              __attribute__((unused)) const size_t width,
-                              __attribute__((unused)) const size_t height) {
+static inline void draw_image(__attribute__((unused)) char const *image,
+                              __attribute__((unused)) size_t const width,
+                              __attribute__((unused)) size_t const height) {
 }
 #endif
 
@@ -176,8 +176,8 @@ int main(void) {
     codes[i] = (char)(i + LOW);
   }
 
-  const size_t width = (size_t)WIDTH * CODES_SIZE;
-  const size_t height = HEIGHT;
+  size_t const width = (size_t)WIDTH * CODES_SIZE;
+  size_t const height = HEIGHT;
   char *image = calloc(width * height, sizeof(*image));
   if (image == NULL) {
     eprintf("alloc_image failed.");
