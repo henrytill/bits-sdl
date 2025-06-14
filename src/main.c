@@ -197,7 +197,7 @@ out_close_state:
 /// @param len The length of the stream
 static void calc_sine(void *userdata, uint8_t *stream, int len) {
   struct audio_state *as = userdata;
-  float *fstream = (float *)stream;
+  float *const fstream = (float *)stream;
 
   _Static_assert(sizeof(*fstream) == 4, "sizeof(*fstream) != 4");
   _Static_assert(AUDIO_NUM_CHANNELS != 0, "AUDIO_NUM_CHANNELS == 0");
@@ -308,7 +308,7 @@ static void window_finish(struct window *win) {
 /// @param title The window title.
 /// @return The window on success, NULL on failure.
 static struct window *window_create(struct config *cfg, char const *title) {
-  struct window *win = emalloc(sizeof(*win));
+  struct window *const win = emalloc(sizeof(*win));
   int const rc = window_init(cfg, title, win);
   if (rc != 0) {
     free(win);
@@ -520,7 +520,7 @@ int main(int argc, char *argv[]) {
   }
 
   char const *const win_title = "Hello, world!";
-  struct window *win = window_create(&cfg, win_title);
+  struct window *const win = window_create(&cfg, win_title);
   if (win == NULL) {
     goto out_close_audio_device;
   }
@@ -532,7 +532,7 @@ int main(int argc, char *argv[]) {
   }
 
   char const *const test_bmp = "test.bmp";
-  char *bmp_file = joinpath2(cfg.asset_dir, test_bmp);
+  char *const bmp_file = joinpath2(cfg.asset_dir, test_bmp);
   if (bmp_file == NULL) {
     goto out_destroy_window;
   }
@@ -543,12 +543,12 @@ int main(int argc, char *argv[]) {
     goto out_destroy_window;
   }
 
-  struct message_queue *queue = message_queue_create(QUEUE_CAP);
+  struct message_queue *const queue = message_queue_create(QUEUE_CAP);
   if (queue == NULL) {
     goto out_destroy_texture;
   }
 
-  SDL_Thread *handler = SDL_CreateThread(handle, "handler", queue);
+  SDL_Thread *const handler = SDL_CreateThread(handle, "handler", queue);
   if (handler == NULL) {
     goto out_message_queue_destroy;
   }
