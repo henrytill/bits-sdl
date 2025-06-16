@@ -59,39 +59,35 @@ src/main.o: CFLAGS += $(LUA_CFLAGS) $(SDL_CFLAGS)
 
 src/message_queue.o: CFLAGS += $(SDL_CFLAGS)
 
+$(BINOUT):
+	mkdir -p -- $(BINOUT)
+
 $(BINOUT)/generate_atlas_from_bdf: LDLIBS += -lm $(FREETYPE_LDLIBS)
-$(BINOUT)/generate_atlas_from_bdf: src/generate_atlas_from_bdf.o src/bmp.o
-	@mkdir -p -- $(BINOUT)
+$(BINOUT)/generate_atlas_from_bdf: src/generate_atlas_from_bdf.o src/bmp.o | $(BINOUT)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BINOUT)/generate_test_bmp: LDLIBS += -lm
-$(BINOUT)/generate_test_bmp: src/generate_test_bmp.o src/bmp.o
-	@mkdir -p -- $(BINOUT)
+$(BINOUT)/generate_test_bmp: src/generate_test_bmp.o src/bmp.o | $(BINOUT)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BINOUT)/get_displays: LDLIBS += $(SDL_LDLIBS)
-$(BINOUT)/get_displays: src/get_displays.o
-	@mkdir -p -- $(BINOUT)
+$(BINOUT)/get_displays: src/get_displays.o | $(BINOUT)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BINOUT)/library_versions: LDLIBS += $(FREETYPE_LDLIBS) $(LUA_LDLIBS) $(SDL_LDLIBS)
-$(BINOUT)/library_versions: src/library_versions.o
-	@mkdir -p -- $(BINOUT)
+$(BINOUT)/library_versions: src/library_versions.o | $(BINOUT)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BINOUT)/main: LDLIBS += -lm $(LUA_LDLIBS) $(SDL_LDLIBS)
-$(BINOUT)/main: src/main.o src/message_queue.o
-	@mkdir -p -- $(BINOUT)
+$(BINOUT)/main: src/main.o src/message_queue.o | $(BINOUT)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BINOUT)/bmp_read_bitmap: LDLIBS += -lm
-$(BINOUT)/bmp_read_bitmap: test/bmp_read_bitmap.o src/bmp.o
-	@mkdir -p -- $(BINOUT)
+$(BINOUT)/bmp_read_bitmap: test/bmp_read_bitmap.o src/bmp.o | $(BINOUT)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(BINOUT)/bmp_read_bitmap_v4: LDLIBS += -lm
-$(BINOUT)/bmp_read_bitmap_v4: test/bmp_read_bitmap_v4.o src/bmp.o
-	@mkdir -p -- $(BINOUT)
+$(BINOUT)/bmp_read_bitmap_v4: test/bmp_read_bitmap_v4.o src/bmp.o | $(BINOUT)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 assets/10x20.bmp: $(BINOUT)/generate_atlas_from_bdf
@@ -108,4 +104,5 @@ check: $(TEST_BINARIES) assets/test.bmp
 .PHONY: clean
 clean:
 	rm -f -- $(BINARIES) $(OBJECTS)
+	rmdir $(BINOUT)
 	rm -f assets/test.bmp
