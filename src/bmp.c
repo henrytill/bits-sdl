@@ -12,7 +12,7 @@ static uint32_t const LCS_WINDOWS_COLOR_SPACE = 0x57696E20;
 
 static size_t const V4_DATA_OFFSET = sizeof(bmp_file_header) + sizeof(bmp_v4_header);
 
-size_t bmp_row_size(double bits_per_pixel, double width) {
+size_t bmp_row_size(double const bits_per_pixel, double const width) {
   assert(bits_per_pixel > 0);
   assert(width > 0);
   double const pixel_bits = bits_per_pixel * width;
@@ -20,7 +20,6 @@ size_t bmp_row_size(double bits_per_pixel, double width) {
   double const dword_bytes = 4;
   double const ret = ceil(pixel_bits / dword_bits) * dword_bytes;
   assert(ret > 0);
-  assert(ret <= (double)SIZE_MAX);
   return (size_t)ret;
 }
 
