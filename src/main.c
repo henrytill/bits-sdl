@@ -261,7 +261,7 @@ static void delay_frame(double const frame_time, uint64_t const begin) {
 /// @param title The window title.
 /// @param win The window to initialize.
 /// @return 0 on success, -1 on failure.
-static int window_init(struct config *cfg, char const *title, struct window *win) {
+static int window_init(struct config cfg[static 1], char const title[static 1], struct window win[static 1]) {
   SDL_LogInfo(APP, "Window type: %s", WINDOW_TYPE_STR[cfg->window_type]);
   win->window = SDL_CreateWindow(title,
                                  cfg->x, cfg->y,
@@ -307,7 +307,7 @@ static void window_finish(struct window *win) {
 /// @param cfg The configuration.
 /// @param title The window title.
 /// @return The window on success, NULL on failure.
-static struct window *window_create(struct config *cfg, char const *title) {
+static struct window *window_create(struct config cfg[static 1], char const title[static 1]) {
   struct window *const win = emalloc(sizeof(*win));
   int const rc = window_init(cfg, title, win);
   if (rc != 0) {
@@ -333,8 +333,8 @@ static void window_destroy(struct window *win) {
 /// @param win The window.
 /// @param rect The rectangle to initialize.
 /// @return 0 on success, -1 on failure.
-static int get_rect(struct window *win, SDL_Rect *rect) {
-  if (win == NULL || win->renderer == NULL) {
+static int get_rect(struct window win[static 1], SDL_Rect rect[static 1]) {
+  if (win->renderer == NULL) {
     return -1;
   }
   int const rc = SDL_GetRendererOutputSize(win->renderer, &rect->w, &rect->h);
@@ -350,7 +350,7 @@ static int get_rect(struct window *win, SDL_Rect *rect) {
 /// @param win The window.
 /// @param path The path to the bitmap file.
 /// @return The texture on success, NULL on failure.
-static SDL_Texture *create_texture(struct window *win, char const *path) {
+static SDL_Texture *create_texture(struct window win[static 1], char const path[static 1]) {
   SDL_Surface *surface = SDL_LoadBMP(path);
   if (surface == NULL) {
     log_sdl_error("SDL_LoadBMP failed");
