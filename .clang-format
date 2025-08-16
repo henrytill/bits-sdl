@@ -32,3 +32,8 @@ SpacesBeforeTrailingComments: 1
 
 # This does horrible things to nested designated initializers when set
 AlignArrayOfStructures: None
+
+# Rustish multi-line arguments and parameters
+BinPackArguments: false
+BinPackParameters: false
+AlignAfterOpenBracket: BlockIndent

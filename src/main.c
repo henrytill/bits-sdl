@@ -162,8 +162,7 @@ static int load_config(char const *file, struct config *cfg) {
     }
     luaL_openlibs(state);
     if (luaL_loadfile(state, file) || lua_pcall(state, 0, 0, 0) != 0) {
-        SDL_LogError(ERR, "%s: failed to load %s, %s", __func__,
-                     file, lua_tostring(state, -1));
+        SDL_LogError(ERR, "%s: failed to load %s, %s", __func__, file, lua_tostring(state, -1));
         goto out_close_state;
     }
     lua_getglobal(state, "width");
@@ -263,10 +262,14 @@ static void delay_frame(double const frame_time, uint64_t const begin) {
 /// @return 0 on success, -1 on failure.
 static int window_init(struct config cfg[static 1], char const title[static 1], struct window win[static 1]) {
     SDL_LogInfo(APP, "Window type: %s", WINDOW_TYPE_STR[cfg->window_type]);
-    win->window = SDL_CreateWindow(title,
-                                   cfg->x, cfg->y,
-                                   cfg->width, cfg->height,
-                                   WINDOW_TYPE_FLAGS[cfg->window_type]);
+    win->window = SDL_CreateWindow(
+        title,
+        cfg->x,
+        cfg->y,
+        cfg->width,
+        cfg->height,
+        WINDOW_TYPE_FLAGS[cfg->window_type]
+    );
     if (win->window == NULL) {
         log_sdl_error("SDL_CreateWindow failed");
         return -1;

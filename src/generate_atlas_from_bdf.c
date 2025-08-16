@@ -162,9 +162,11 @@ static void draw_image(char const *image, size_t const width, size_t const heigh
     }
 }
 #else
-static inline void draw_image(__attribute__((unused)) char const *image,
-                              __attribute__((unused)) size_t const width,
-                              __attribute__((unused)) size_t const height) {
+static inline void draw_image(
+    __attribute__((unused)) char const *image,
+    __attribute__((unused)) size_t const width,
+    __attribute__((unused)) size_t const height
+) {
 }
 #endif
 
