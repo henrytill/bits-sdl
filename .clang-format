@@ -1,4 +1,4 @@
-AccessModifierOffset: -2
+AccessModifierOffset: -4
 AlignConsecutiveMacros: true
 AlignOperands: true
 AlignTrailingComments: true
@@ -22,8 +22,8 @@ FixNamespaceComments: true
 IndentCaseLabels: false
 IndentCaseBlocks: false
 IndentPPDirectives: AfterHash
-IndentWidth: 2
-ObjCBlockIndentWidth: 2
+IndentWidth: 4
+ObjCBlockIndentWidth: 4
 PointerAlignment: Right
 QualifierAlignment: Right
 ReflowComments: true

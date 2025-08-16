@@ -3,8 +3,8 @@
 #include "bmp.h"
 
 enum {
-  WIDTH = 4,
-  HEIGHT = 2,
+    WIDTH = 4,
+    HEIGHT = 2,
 };
 
 static bmp_pixel32 const BUF[] = {
@@ -19,13 +19,13 @@ static bmp_pixel32 const BUF[] = {
 };
 
 int main(int argc, char *argv[]) {
-  if (argc != 2) {
-    return EXIT_FAILURE;
-  }
+    if (argc != 2) {
+        return EXIT_FAILURE;
+    }
 
-  char const *bmp_file = argv[1];
+    char const *bmp_file = argv[1];
 
-  return (bmp_v4_write(BUF, WIDTH, HEIGHT, bmp_file) == 0)
-             ? EXIT_SUCCESS
-             : EXIT_FAILURE;
+    return (bmp_v4_write(BUF, WIDTH, HEIGHT, bmp_file) == 0)
+               ? EXIT_SUCCESS
+               : EXIT_FAILURE;
 }
