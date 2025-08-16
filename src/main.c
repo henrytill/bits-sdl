@@ -199,8 +199,8 @@ static void calc_sine(void *userdata, uint8_t *stream, int len) {
   struct audio_state *as = userdata;
   float *const fstream = (float *)stream;
 
-  _Static_assert(sizeof(*fstream) == 4, "sizeof(*fstream) != 4");
-  _Static_assert(AUDIO_NUM_CHANNELS != 0, "AUDIO_NUM_CHANNELS == 0");
+  STATIC_ASSERT(sizeof(*fstream) == 4);
+  STATIC_ASSERT(AUDIO_NUM_CHANNELS != 0);
   assert((len / ((int)sizeof(*fstream) * AUDIO_NUM_CHANNELS)) == as->buffer_size);
   (void)len;
 

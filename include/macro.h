@@ -13,6 +13,8 @@
 #  define debug_printf(fmt, ...)
 #endif
 
+#define STATIC_ASSERT(e) _Static_assert((e), #e)
+
 // Cleanup
 
 #define AT_EXIT(func)                                      \
