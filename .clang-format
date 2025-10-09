@@ -1,4 +1,4 @@
-AccessModifierOffset: -4
+AccessModifierOffset: -2
 AlignConsecutiveMacros: true
 AlignOperands: true
 AlignTrailingComments: true
@@ -16,14 +16,14 @@ BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: true
 ColumnLimit: 0
-ContinuationIndentWidth: 4
+ContinuationIndentWidth: 2
 DerivePointerAlignment: false
 FixNamespaceComments: true
 IndentCaseLabels: false
 IndentCaseBlocks: false
 IndentPPDirectives: AfterHash
-IndentWidth: 4
-ObjCBlockIndentWidth: 4
+IndentWidth: 2
+ObjCBlockIndentWidth: 2
 PointerAlignment: Right
 QualifierAlignment: Right
 ReflowComments: true

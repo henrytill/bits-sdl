@@ -5,83 +5,83 @@
 #include <stdint.h>
 
 typedef enum bmp_header_size {
-    BITMAPCOREHEADER = 12,
-    OS22XBITMAPHEADER = 64,
-    BITMAPINFOHEADER = 40,
-    BITMAPV2INFOHEADER = 52,
-    BITMAPV3INFOHEADER = 56,
-    BITMAPV4HEADER = 108,
-    BITMAPV5HEADER = 124,
+  BITMAPCOREHEADER = 12,
+  OS22XBITMAPHEADER = 64,
+  BITMAPINFOHEADER = 40,
+  BITMAPV2INFOHEADER = 52,
+  BITMAPV3INFOHEADER = 56,
+  BITMAPV4HEADER = 108,
+  BITMAPV5HEADER = 124,
 } bmp_header_size;
 
 typedef struct bmp_file_header {
-    uint16_t file_type;
-    uint32_t file_size;
-    uint16_t reserved1;
-    uint16_t reserved2;
-    uint32_t offset;
+  uint16_t file_type;
+  uint32_t file_size;
+  uint16_t reserved1;
+  uint16_t reserved2;
+  uint32_t offset;
 } __attribute__((packed)) bmp_file_header;
 
 typedef struct bmp_info_header {
-    uint32_t size;           // DIB Header size (bytes)
-    int32_t width;           // Image width (pixels)
-    int32_t height;          // Image height (pixels)
-    uint16_t planes;         // Number of planes
-    uint16_t bits_per_pixel; // Bits per pixel
-    uint32_t compression;    // Compression mode
-    uint32_t image_size;     // Image size (bytes)
-    int32_t h_res;           // Horizontal resolution (pixels per meter)
-    int32_t v_res;           // Vertical resolution (pixels per meter)
-    uint32_t colors;         // Used colors
-    uint32_t imp_colors;     // Important colors
+  uint32_t size;           // DIB Header size (bytes)
+  int32_t width;           // Image width (pixels)
+  int32_t height;          // Image height (pixels)
+  uint16_t planes;         // Number of planes
+  uint16_t bits_per_pixel; // Bits per pixel
+  uint32_t compression;    // Compression mode
+  uint32_t image_size;     // Image size (bytes)
+  int32_t h_res;           // Horizontal resolution (pixels per meter)
+  int32_t v_res;           // Vertical resolution (pixels per meter)
+  uint32_t colors;         // Used colors
+  uint32_t imp_colors;     // Important colors
 } __attribute__((packed)) bmp_info_header;
 
 typedef struct bmp_colorspace {
-    int32_t rx;
-    int32_t ry;
-    int32_t rz;
-    int32_t gx;
-    int32_t gy;
-    int32_t gz;
-    int32_t bx;
-    int32_t by;
-    int32_t bz;
+  int32_t rx;
+  int32_t ry;
+  int32_t rz;
+  int32_t gx;
+  int32_t gy;
+  int32_t gz;
+  int32_t bx;
+  int32_t by;
+  int32_t bz;
 } __attribute__((packed)) bmp_colorspace;
 
 typedef struct bmp_v4_header {
-    uint32_t size;           // DIB Header Size (bytes)
-    int32_t width;           // Image width (pixels)
-    int32_t height;          // Image height (pixels)
-    uint16_t planes;         // Number of planes
-    uint16_t bits_per_pixel; // Bits per pixel
-    uint32_t compression;    // Compression mode
-    uint32_t image_size;     // Image size (bytes)
-    int32_t h_res;           // Horizontal resolution (pixels per meter)
-    int32_t v_res;           // Vertical resolution (pixels per meter)
-    uint32_t colors;         // Used colors
-    uint32_t imp_colors;     // Important colors
-    uint32_t r_mask;
-    uint32_t g_mask;
-    uint32_t b_mask;
-    uint32_t a_mask;
-    uint32_t colorspace_type;
-    bmp_colorspace colorspace;
-    uint32_t r_gamma;
-    uint32_t g_gamma;
-    uint32_t b_gamma;
+  uint32_t size;           // DIB Header Size (bytes)
+  int32_t width;           // Image width (pixels)
+  int32_t height;          // Image height (pixels)
+  uint16_t planes;         // Number of planes
+  uint16_t bits_per_pixel; // Bits per pixel
+  uint32_t compression;    // Compression mode
+  uint32_t image_size;     // Image size (bytes)
+  int32_t h_res;           // Horizontal resolution (pixels per meter)
+  int32_t v_res;           // Vertical resolution (pixels per meter)
+  uint32_t colors;         // Used colors
+  uint32_t imp_colors;     // Important colors
+  uint32_t r_mask;
+  uint32_t g_mask;
+  uint32_t b_mask;
+  uint32_t a_mask;
+  uint32_t colorspace_type;
+  bmp_colorspace colorspace;
+  uint32_t r_gamma;
+  uint32_t g_gamma;
+  uint32_t b_gamma;
 } __attribute__((packed)) bmp_v4_header;
 
 typedef struct bmp_pixel24 {
-    uint8_t b;
-    uint8_t g;
-    uint8_t r;
+  uint8_t b;
+  uint8_t g;
+  uint8_t r;
 } __attribute__((packed)) bmp_pixel24;
 
 typedef struct bmp_pixel32 {
-    uint8_t b;
-    uint8_t g;
-    uint8_t r;
-    uint8_t a;
+  uint8_t b;
+  uint8_t g;
+  uint8_t r;
+  uint8_t a;
 } __attribute__((packed)) bmp_pixel32;
 
 /// Calculates the number of bytes per row.
