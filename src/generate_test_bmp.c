@@ -19,9 +19,8 @@ static bmp_pixel32 const BUF[] = {
 };
 
 int main(int argc, char *argv[]) {
-  if (argc != 2) {
+  if (argc != 2)
     return EXIT_FAILURE;
-  }
 
   char const *bmp_file = argv[1];
 

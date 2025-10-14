@@ -24,25 +24,22 @@ static int log_display_modes(void) {
   SDL_DisplayMode mode = {0};
   for (int i = 0; i < num_displays; ++i) {
     rc = log_current_mode(i, &mode);
-    if (rc != 0) {
+    if (rc != 0)
       return -1;
-    }
   }
   return 0;
 }
 
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[]) {
   int rc = SDL_Init(SDL_INIT_VIDEO);
-  if (rc != 0) {
+  if (rc != 0)
     return EXIT_FAILURE;
-  }
 
   AT_EXIT(SDL_Quit);
 
   rc = log_display_modes();
-  if (rc != 0) {
+  if (rc != 0)
     return EXIT_FAILURE;
-  }
 
   return 0;
 }

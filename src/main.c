@@ -126,9 +126,9 @@ static int parse_args(int argc, char *argv[], struct args *as) {
   for (int i = 0; i < argc;) {
     arg = argv[i++];
     if (strcmp(arg, "-c") == 0 || strcmp(arg, "--config") == 0) {
-      if (i + 1 >= argc) {
+      if (i + 1 >= argc)
         return -1;
-      }
+
       as->config_file = argv[i++];
     }
   }
@@ -244,13 +244,13 @@ static double calc_delta(uint64_t const begin, uint64_t const end) {
 /// @param begin The timestamp in ticks when the frame started
 static void delay_frame(double const frame_time, uint64_t const begin) {
   assert(frame_time > 0);
-  if (calc_delta(begin, now()) >= frame_time) {
+  if (calc_delta(begin, now()) >= frame_time)
     return;
-  }
+
   uint32_t const time = (uint32_t)(frame_time - calc_delta(begin, now()) - 1.0);
-  if (time > 0) {
+  if (time > 0)
     SDL_Delay(time);
-  }
+
   while (calc_delta(begin, now()) < frame_time) {}
 }
 
@@ -294,15 +294,14 @@ static int window_init(struct config cfg[static 1], char const title[static 1], 
 ///
 /// @param win The window to destroy.
 static void window_finish(struct window *win) {
-  if (win == NULL) {
+  if (win == NULL)
     return;
-  }
-  if (win->renderer != NULL) {
+
+  if (win->renderer != NULL)
     SDL_DestroyRenderer(win->renderer);
-  }
-  if (win->window != NULL) {
+
+  if (win->window != NULL)
     SDL_DestroyWindow(win->window);
-  }
 }
 
 /// Creates a window and renderer.
@@ -324,9 +323,9 @@ static struct window *window_create(struct config cfg[static 1], char const titl
 ///
 /// @param win The window to destroy.
 static void window_destroy(struct window *win) {
-  if (win == NULL) {
+  if (win == NULL)
     return;
-  }
+
   window_finish(win);
   free(win);
 }
@@ -337,9 +336,9 @@ static void window_destroy(struct window *win) {
 /// @param rect The rectangle to initialize.
 /// @return 0 on success, -1 on failure.
 static int get_rect(struct window win[static 1], SDL_Rect rect[static 1]) {
-  if (win->renderer == NULL) {
+  if (win->renderer == NULL)
     return -1;
-  }
+
   int const rc = SDL_GetRendererOutputSize(win->renderer, &rect->w, &rect->h);
   if (rc != 0) {
     log_sdl_error("SDL_GetRendererOutputSize failed");
@@ -518,43 +517,36 @@ int main(int argc, char *argv[]) {
   (void)load_config(as.config_file, &cfg);
 
   int rc = init();
-  if (rc != 0) {
+  if (rc != 0)
     return EXIT_FAILURE;
-  }
 
   char const *const win_title = "Hello, world!";
   struct window *const win = window_create(&cfg, win_title);
-  if (win == NULL) {
+  if (win == NULL)
     goto out_close_audio_device;
-  }
 
   SDL_Rect win_rect = {0};
   rc = get_rect(win, &win_rect);
-  if (rc != 0) {
+  if (rc != 0)
     goto out_destroy_window;
-  }
 
   char const *const test_bmp = "test.bmp";
   char *const bmp_file = joinpath2(cfg.asset_dir, test_bmp);
-  if (bmp_file == NULL) {
+  if (bmp_file == NULL)
     goto out_destroy_window;
-  }
 
   SDL_Texture *texture = create_texture(win, bmp_file);
   free(bmp_file);
-  if (texture == NULL) {
+  if (texture == NULL)
     goto out_destroy_window;
-  }
 
   struct message_queue *const queue = message_queue_create(QUEUE_CAP);
-  if (queue == NULL) {
+  if (queue == NULL)
     goto out_destroy_texture;
-  }
 
   SDL_Thread *const handler = SDL_CreateThread(handle, "handler", queue);
-  if (handler == NULL) {
+  if (handler == NULL)
     goto out_message_queue_destroy;
-  }
 
   double const frame_time = calc_frame_time(cfg.frame_rate);
 
@@ -568,9 +560,8 @@ int main(int argc, char *argv[]) {
     update(delta);
 
     rc = render(win->renderer, texture, &win_rect);
-    if (rc != 0) {
+    if (rc != 0)
       goto out_wait_thread;
-    }
 
     delay_frame(frame_time, begin);
     end = now();

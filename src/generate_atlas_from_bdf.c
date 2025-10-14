@@ -84,9 +84,9 @@ static void render_bitmap_char(FT_GlyphSlot slot, char *target, size_t const cod
     for (size_t i = 0; i < pitch; ++i) {
       for (size_t j = 0, x; j < CHAR_BIT; ++j) {
         x = j + (i * CHAR_BIT);
-        if (x >= width) {
+        if (x >= width)
           continue;
-        }
+
         target[(y * stride) + (x + (offset * width))] = GET_BIT(buffer[p + i], j);
       }
     }
@@ -155,9 +155,10 @@ out_done_lib:
 static void draw_image(char const *image, size_t const width, size_t const height) {
   for (size_t y = 0; y < height; ++y) {
     printf("%2zd|", y);
-    for (size_t x = 0; x < width; ++x) {
+
+    for (size_t x = 0; x < width; ++x)
       putchar(image[(y * width) + x] ? '*' : ' ');
-    }
+
     printf("|\n");
   }
 }
@@ -174,9 +175,8 @@ int main(void) {
   int ret = EXIT_FAILURE;
 
   char codes[CODES_SIZE] = {0};
-  for (int i = 0; i < CODES_SIZE; ++i) {
+  for (int i = 0; i < CODES_SIZE; ++i)
     codes[i] = (char)(i + LOW);
-  }
 
   size_t const width = (size_t)WIDTH * CODES_SIZE;
   size_t const height = HEIGHT;
@@ -187,22 +187,18 @@ int main(void) {
   }
 
   int rc = render_chars(codes, image);
-  if (rc != 0) {
+  if (rc != 0)
     goto out_free_image;
-  }
 
   draw_image(image, width, height);
 
   bmp_pixel32 *buffer = calloc(width * height, sizeof(*buffer));
-  if (buffer == NULL) {
+  if (buffer == NULL)
     goto out_free_image;
-  }
 
-  for (size_t y = height, i = 0; y-- > 0;) {
-    for (size_t x = 0; x < width; ++x, ++i) {
+  for (size_t y = height, i = 0; y-- > 0;)
+    for (size_t x = 0; x < width; ++x, ++i)
       buffer[i] = image[(y * width) + x] ? BLACK : WHITE;
-    }
-  }
 
   rc = bmp_v4_write(buffer, width, height, BMP_FILE);
   if (rc != 0) {
