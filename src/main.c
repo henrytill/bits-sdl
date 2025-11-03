@@ -64,12 +64,12 @@ struct config {
 };
 
 struct audio_state {
-  int const sample_rate;      // Samples per second
-  uint16_t const buffer_size; // Samples per buffer
-  double const frequency;     // Frequency of the sine wave
-  double const max_volume;    // Maximum volume
-  double volume;              // Current volume, 0.0 to max_volume
-  uint64_t elapsed;           // Number of buffer fills
+  int const sample_rate;      ///< Samples per second
+  uint16_t const buffer_size; ///< Samples per buffer
+  double const frequency;     ///< Frequency of the sine wave
+  double const max_volume;    ///< Maximum volume
+  double volume;              ///< Current volume, 0.0 to max_volume
+  uint64_t elapsed;           ///< Number of buffer fills
 };
 
 struct state {
@@ -155,16 +155,19 @@ static char *joinpath2(char const *a, char const *b) {
 /// @return 0 on success, -1 on failure
 static int load_config(char const *file, struct config *cfg) {
   int ret = -1;
+
   lua_State *state = luaL_newstate();
   if (state == NULL) {
     SDL_LogError(ERR, "%s: luaL_newstate failed", __func__);
     return -1;
   }
+
   luaL_openlibs(state);
   if (luaL_loadfile(state, file) || lua_pcall(state, 0, 0, 0) != 0) {
     SDL_LogError(ERR, "%s: failed to load %s, %s", __func__, file, lua_tostring(state, -1));
     goto out_close_state;
   }
+
   lua_getglobal(state, "width");
   lua_getglobal(state, "height");
   lua_getglobal(state, "framerate");
@@ -180,9 +183,11 @@ static int load_config(char const *file, struct config *cfg) {
     SDL_LogError(ERR, "%s: framerate is not a number", __func__);
     goto out_close_state;
   }
+
   cfg->width = (int)lua_tonumber(state, -3);
   cfg->height = (int)lua_tonumber(state, -2);
   cfg->frame_rate = (int)lua_tonumber(state, -1);
+
   ret = 0;
 out_close_state:
   lua_close(state);
