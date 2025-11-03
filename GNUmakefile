@@ -1,6 +1,14 @@
 CFLAGS = -g -std=gnu11 -Wall -Wextra -Wconversion -Wsign-conversion -Iinclude
 BINOUT = _bin
 
+INSTALL = install
+INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA = $(INSTALL) -m 644
+
+bindir = /bin
+prefix = /usr/local
+DESTDIR = $(prefix)
+
 LUA_CFLAGS = $(shell pkg-config --cflags lua5.1)
 LUA_LDLIBS = $(shell pkg-config --libs lua5.1)
 
@@ -100,6 +108,11 @@ assets/test.bmp: $(BINOUT)/generate_test_bmp
 check: $(TEST_BINARIES) assets/test.bmp
 	$(BINOUT)/bmp_read_bitmap_v4 assets/test.bmp
 	$(BINOUT)/bmp_read_bitmap assets/sample_24bit.bmp
+
+.PHONY: install
+install:
+	mkdir -p $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) $(BINOUT)/main $(DESTDIR)$(bindir)/bits-sdl
 
 .PHONY: clean
 clean:

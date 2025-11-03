@@ -9,3 +9,4 @@ src/*.o
 test/*.o
 _bin/
 config.mk
+/result*
