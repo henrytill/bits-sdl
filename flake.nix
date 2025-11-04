@@ -44,6 +44,7 @@
         devShell = pkgs.mkShell {
           inputsFrom = [ pkgs.bits-sdl ];
           packages = with pkgs; [
+            bear
             clang-tools
             yaml-language-server
           ];
