@@ -1,39 +1,8 @@
-AccessModifierOffset: -2
 AlignConsecutiveMacros: true
-AlignOperands: true
 AlignTrailingComments: true
-AllowAllArgumentsOnNextLine: false
-AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Always
-AllowShortCaseLabelsOnASingleLine: true
-AllowShortEnumsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: true
-AllowShortLambdasOnASingleLine: All
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
-BasedOnStyle: LLVM
-BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Attach
-BreakBeforeTernaryOperators: true
+BasedOnStyle: WebKit
 ColumnLimit: 0
-ContinuationIndentWidth: 2
 DerivePointerAlignment: false
-FixNamespaceComments: true
-IndentCaseLabels: false
-IndentCaseBlocks: false
 IndentPPDirectives: AfterHash
-IndentWidth: 2
-ObjCBlockIndentWidth: 2
 PointerAlignment: Right
 QualifierAlignment: Right
-ReflowComments: true
-SortIncludes: true
-SpacesBeforeTrailingComments: 1
-
-# This does horrible things to nested designated initializers when set
-AlignArrayOfStructures: None
-
-# Rustish multi-line arguments and parameters
-BinPackArguments: false
-BinPackParameters: false
-AlignAfterOpenBracket: BlockIndent
