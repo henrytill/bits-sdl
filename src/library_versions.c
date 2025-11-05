@@ -7,7 +7,8 @@
 #include <lauxlib.h>
 #include <lua.h>
 
-enum {
+enum
+{
     APP = SDL_LOG_CATEGORY_CUSTOM,
 };
 
@@ -15,7 +16,8 @@ static void log_freetype_version(void)
 {
     FT_Library lib = NULL;
     int rc = FT_Init_FreeType(&lib);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         SDL_LogError(APP, "Failed to initialize FreeType");
         return;
     }
@@ -30,7 +32,8 @@ static void log_freetype_version(void)
 static void log_lua_version(void)
 {
     lua_State *state = luaL_newstate();
-    if (state == NULL) {
+    if (state == NULL)
+    {
         SDL_LogError(APP, "Failed to initialize Lua");
         return;
     }

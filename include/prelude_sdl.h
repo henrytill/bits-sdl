@@ -28,7 +28,8 @@ COMPATIBLE_TYPES
 
 #define now SDL_GetPerformanceCounter
 
-enum {
+enum
+{
     APP = SDL_LOG_CATEGORY_CUSTOM,
     ERR,
 };
@@ -39,9 +40,12 @@ enum {
 static inline void log_sdl_error(char const *msg)
 {
     char const *err = SDL_GetError();
-    if (strlen(err) != 0) {
+    if (strlen(err) != 0)
+    {
         SDL_LogError(ERR, "%s (%s)", msg, err);
-    } else {
+    }
+    else
+    {
         SDL_LogError(ERR, "%s", msg);
     }
 }

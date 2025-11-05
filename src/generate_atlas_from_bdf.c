@@ -56,7 +56,8 @@ SELECT_BIT_TESTS
 GET_BIT_TESTS
 #undef X
 
-enum {
+enum
+{
     WIDTH = 10,
     HEIGHT = 20,
     LOW = '!',
@@ -81,9 +82,12 @@ static void render_bitmap_char(FT_GlyphSlot slot, char *target, size_t const cod
 
     assert(width == WIDTH);
 
-    for (size_t y = 0, p = 0; y < rows; ++y, p += pitch) {
-        for (size_t i = 0; i < pitch; ++i) {
-            for (size_t j = 0, x; j < CHAR_BIT; ++j) {
+    for (size_t y = 0, p = 0; y < rows; ++y, p += pitch)
+    {
+        for (size_t i = 0; i < pitch; ++i)
+        {
+            for (size_t j = 0, x; j < CHAR_BIT; ++j)
+            {
                 x = j + (i * CHAR_BIT);
                 if (x >= width)
                     continue;
@@ -97,21 +101,25 @@ static void render_bitmap_char(FT_GlyphSlot slot, char *target, size_t const cod
 static int render_bitmap_chars(FT_Face face, char const codes[CODES_SIZE], char *image)
 {
     int rc = FT_Set_Pixel_Sizes(face, WIDTH, HEIGHT);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         eprintf("FT_Set_Pixel_Sizes failed.  Error code: %d", rc);
         return -1;
     }
 
     FT_GlyphSlot slot = NULL;
-    for (size_t i = 0; i < CODES_SIZE; ++i) {
+    for (size_t i = 0; i < CODES_SIZE; ++i)
+    {
         rc = FT_Load_Char(face, (FT_ULong)codes[i], FT_LOAD_NO_SCALE | FT_LOAD_MONOCHROME);
-        if (rc != 0) {
+        if (rc != 0)
+        {
             eprintf("FT_Load_Char failed.  Error code: %d", rc);
             return -1;
         }
         slot = face->glyph;
         rc = FT_Render_Glyph(slot, FT_RENDER_MODE_MONO);
-        if (rc != 0) {
+        if (rc != 0)
+        {
             eprintf("FT_Render_Glyph failed.  Error code: %d", rc);
             return -1;
         }
@@ -129,20 +137,23 @@ static int render_chars(char const codes[CODES_SIZE], char *image)
 
     FT_Library lib = NULL;
     int rc = FT_Init_FreeType(&lib);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         eprintf("FT_Init_FreeType failed.  Error code: %d", rc);
         return -1;
     }
 
     FT_Face face = NULL;
     rc = FT_New_Face(lib, FONT_FILE, 0, &face);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         eprintf("FT_New_Face failed.  Error code: %d", rc);
         goto out_done_lib;
     }
 
     rc = render_bitmap_chars(face, codes, image);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         goto out_done_face;
     }
 
@@ -157,7 +168,8 @@ out_done_lib:
 #ifdef DRAW_IMAGE
 static void draw_image(char const *image, size_t const width, size_t const height)
 {
-    for (size_t y = 0; y < height; ++y) {
+    for (size_t y = 0; y < height; ++y)
+    {
         printf("%2zd|", y);
 
         for (size_t x = 0; x < width; ++x)
@@ -186,7 +198,8 @@ int main(void)
     size_t const width = (size_t)WIDTH * CODES_SIZE;
     size_t const height = HEIGHT;
     char *image = calloc(width * height, sizeof(*image));
-    if (image == NULL) {
+    if (image == NULL)
+    {
         eprintf("alloc_image failed.");
         return EXIT_FAILURE;
     }
@@ -206,7 +219,8 @@ int main(void)
             buffer[i] = image[(y * width) + x] ? BLACK : WHITE;
 
     rc = bmp_v4_write(buffer, width, height, BMP_FILE);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         eprintf("bmp_v4_write failed.  Error code: %d", rc);
         goto out_free_buffer;
     }

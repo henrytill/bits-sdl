@@ -4,7 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef enum bmp_header_size {
+typedef enum bmp_header_size
+{
     BITMAPCOREHEADER = 12,
     OS22XBITMAPHEADER = 64,
     BITMAPINFOHEADER = 40,
@@ -14,7 +15,8 @@ typedef enum bmp_header_size {
     BITMAPV5HEADER = 124,
 } bmp_header_size;
 
-typedef struct bmp_file_header {
+typedef struct bmp_file_header
+{
     uint16_t file_type;
     uint32_t file_size;
     uint16_t reserved1;
@@ -22,7 +24,8 @@ typedef struct bmp_file_header {
     uint32_t offset;
 } __attribute__((packed)) bmp_file_header;
 
-typedef struct bmp_info_header {
+typedef struct bmp_info_header
+{
     uint32_t size;           // DIB Header size (bytes)
     int32_t width;           // Image width (pixels)
     int32_t height;          // Image height (pixels)
@@ -36,7 +39,8 @@ typedef struct bmp_info_header {
     uint32_t imp_colors;     // Important colors
 } __attribute__((packed)) bmp_info_header;
 
-typedef struct bmp_colorspace {
+typedef struct bmp_colorspace
+{
     int32_t rx;
     int32_t ry;
     int32_t rz;
@@ -48,7 +52,8 @@ typedef struct bmp_colorspace {
     int32_t bz;
 } __attribute__((packed)) bmp_colorspace;
 
-typedef struct bmp_v4_header {
+typedef struct bmp_v4_header
+{
     uint32_t size;           // DIB Header Size (bytes)
     int32_t width;           // Image width (pixels)
     int32_t height;          // Image height (pixels)
@@ -71,13 +76,15 @@ typedef struct bmp_v4_header {
     uint32_t b_gamma;
 } __attribute__((packed)) bmp_v4_header;
 
-typedef struct bmp_pixel24 {
+typedef struct bmp_pixel24
+{
     uint8_t b;
     uint8_t g;
     uint8_t r;
 } __attribute__((packed)) bmp_pixel24;
 
-typedef struct bmp_pixel32 {
+typedef struct bmp_pixel32
+{
     uint8_t b;
     uint8_t g;
     uint8_t r;

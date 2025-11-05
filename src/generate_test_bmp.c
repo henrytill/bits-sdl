@@ -2,7 +2,8 @@
 
 #include "bmp.h"
 
-enum {
+enum
+{
     WIDTH = 4,
     HEIGHT = 2,
 };

@@ -4,7 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-enum message_queue_failure {
+enum message_queue_failure
+{
     MSGQ_FAILURE_NULL_POINTER = 1,
     MSGQ_FAILURE_MALLOC = 2,
     MSGQ_FAILURE_SEM_CREATE = 3,
@@ -19,7 +20,8 @@ enum message_queue_failure {
 
 static inline char const *message_queue_failure_str(enum message_queue_failure failure)
 {
-    switch (failure) {
+    switch (failure)
+    {
     case MSGQ_FAILURE_NULL_POINTER:
         return "NULL pointer";
     case MSGQ_FAILURE_MALLOC:
@@ -44,7 +46,8 @@ static inline char const *message_queue_failure_str(enum message_queue_failure f
     }
 }
 
-enum message_tag {
+enum message_tag
+{
     MSG_TAG_NONE = 0,
     MSG_TAG_SOME = 1,
     MSG_TAG_QUIT = 2,
@@ -52,7 +55,8 @@ enum message_tag {
 
 static inline char const *message_tag_str(enum message_tag tag)
 {
-    switch (tag) {
+    switch (tag)
+    {
     case MSG_TAG_NONE:
         return "NONE";
     case MSG_TAG_SOME:
@@ -64,7 +68,8 @@ static inline char const *message_tag_str(enum message_tag tag)
     }
 }
 
-struct message {
+struct message
+{
     enum message_tag tag;
     intptr_t value;
 };

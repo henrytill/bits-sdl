@@ -15,13 +15,15 @@ int main(int argc, char *argv[])
     bmp_info_header info_header = { 0 };
     char *image = NULL;
 
-    if (argc != 2) {
+    if (argc != 2)
+    {
         return EXIT_FAILURE;
     }
 
     char const *bmp_file = argv[1];
 
-    if (bmp_read(bmp_file, &file_header, &info_header, &image) != 0) {
+    if (bmp_read(bmp_file, &file_header, &info_header, &image) != 0)
+    {
         return EXIT_FAILURE;
     }
 
@@ -31,7 +33,8 @@ int main(int argc, char *argv[])
         .r = 255,
     };
 
-    if (memcmp(&expected, (bmp_pixel24 *)image, sizeof(bmp_pixel24)) != 0) {
+    if (memcmp(&expected, (bmp_pixel24 *)image, sizeof(bmp_pixel24)) != 0)
+    {
         free(image);
         return EXIT_FAILURE;
     }

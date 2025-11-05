@@ -16,13 +16,15 @@ int main(int argc, char *argv[])
     bmp_v4_header v4_header = { 0 };
     char *image = NULL;
 
-    if (argc != 2) {
+    if (argc != 2)
+    {
         return EXIT_FAILURE;
     }
 
     char const *bmp_file = argv[1];
 
-    if (bmp_v4_read(bmp_file, &file_header, &v4_header, &image) != 0) {
+    if (bmp_v4_read(bmp_file, &file_header, &v4_header, &image) != 0)
+    {
         return EXIT_FAILURE;
     }
 
@@ -33,7 +35,8 @@ int main(int argc, char *argv[])
         .a = 127,
     };
 
-    if (memcmp(&expected, (bmp_pixel32 *)image, sizeof(bmp_pixel32)) != 0) {
+    if (memcmp(&expected, (bmp_pixel32 *)image, sizeof(bmp_pixel32)) != 0)
+    {
         free(image);
         return EXIT_FAILURE;
     }

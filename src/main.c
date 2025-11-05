@@ -16,17 +16,20 @@
 #include "prelude_sdl.h"
 #include "prelude_stdlib.h"
 
-enum {
+enum
+{
     AUDIO_NUM_CHANNELS = 2,
     CENTERED = SDL_WINDOWPOS_CENTERED,
 };
 
-enum events {
+enum events
+{
     EVENT_0 = SDL_USEREVENT,
     EVENT_MAX,
 };
 
-struct args {
+struct args
+{
     char *config_file;
 };
 
@@ -35,7 +38,8 @@ struct args {
     X(FULLSCREEN, 1, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN, "Fullscreen") \
     X(BORDERLESS, 2, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN_DESKTOP, "Borderless Fullscreen")
 
-enum {
+enum
+{
 #define X(variant, i, flags, str) variant = (i),
     WINDOW_TYPE_VARIANTS
 #undef X
@@ -53,7 +57,8 @@ static char const *const WINDOW_TYPE_STR[] = {
 #undef X
 };
 
-struct config {
+struct config
+{
     int window_type;
     int x;
     int y;
@@ -63,7 +68,8 @@ struct config {
     char *asset_dir;
 };
 
-struct audio_state {
+struct audio_state
+{
     int const sample_rate;      ///< Samples per second
     uint16_t const buffer_size; ///< Samples per buffer
     double const frequency;     ///< Frequency of the sine wave
@@ -72,14 +78,16 @@ struct audio_state {
     uint64_t elapsed;           ///< Number of buffer fills
 };
 
-struct state {
+struct state
+{
     SDL_AudioDeviceID audio_device;
     struct audio_state audio;
     int loop_stat;
     int tone_stat;
 };
 
-struct window {
+struct window
+{
     SDL_Window *window;
     SDL_Renderer *renderer;
 };
@@ -124,9 +132,11 @@ static struct state st = {
 static int parse_args(int argc, char *argv[], struct args *as)
 {
     char *arg = NULL;
-    for (int i = 0; i < argc;) {
+    for (int i = 0; i < argc;)
+    {
         arg = argv[i++];
-        if (strcmp(arg, "-c") == 0 || strcmp(arg, "--config") == 0) {
+        if (strcmp(arg, "-c") == 0 || strcmp(arg, "--config") == 0)
+        {
             if (i + 1 >= argc)
                 return -1;
 
@@ -160,13 +170,15 @@ static int load_config(char const *file, struct config *cfg)
     int ret = -1;
 
     lua_State *state = luaL_newstate();
-    if (state == NULL) {
+    if (state == NULL)
+    {
         SDL_LogError(ERR, "%s: luaL_newstate failed", __func__);
         return -1;
     }
 
     luaL_openlibs(state);
-    if (luaL_loadfile(state, file) || lua_pcall(state, 0, 0, 0) != 0) {
+    if (luaL_loadfile(state, file) || lua_pcall(state, 0, 0, 0) != 0)
+    {
         SDL_LogError(ERR, "%s: failed to load %s, %s", __func__, file, lua_tostring(state, -1));
         goto out_close_state;
     }
@@ -174,15 +186,18 @@ static int load_config(char const *file, struct config *cfg)
     lua_getglobal(state, "width");
     lua_getglobal(state, "height");
     lua_getglobal(state, "framerate");
-    if (!lua_isnumber(state, -3)) {
+    if (!lua_isnumber(state, -3))
+    {
         SDL_LogError(ERR, "%s: width is not a number", __func__);
         goto out_close_state;
     }
-    if (!lua_isnumber(state, -2)) {
+    if (!lua_isnumber(state, -2))
+    {
         SDL_LogError(ERR, "%s: height is not a number", __func__);
         goto out_close_state;
     }
-    if (!lua_isnumber(state, -1)) {
+    if (!lua_isnumber(state, -1))
+    {
         SDL_LogError(ERR, "%s: framerate is not a number", __func__);
         goto out_close_state;
     }
@@ -216,7 +231,8 @@ static void calc_sine(void *userdata, uint8_t *stream, int len)
     uint64_t const buffer_size = (uint64_t)as->buffer_size;
     uint64_t const offset = as->elapsed * buffer_size;
 
-    for (uint64_t i = 0; i < buffer_size; ++i) {
+    for (uint64_t i = 0; i < buffer_size; ++i)
+    {
         double const time = (double)(offset + i) / sample_rate;
         double const x = 2.0 * M_PI * time * as->frequency;
         double const y = as->volume * sin(x);
@@ -263,7 +279,9 @@ static void delay_frame(double const frame_time, uint64_t const begin)
     if (time > 0)
         SDL_Delay(time);
 
-    while (calc_delta(begin, now()) < frame_time) { }
+    while (calc_delta(begin, now()) < frame_time)
+    {
+    }
 }
 
 /// Initializes a window and renderer.
@@ -282,18 +300,21 @@ static int window_init(struct config cfg[static 1], char const title[static 1], 
         cfg->width,
         cfg->height,
         WINDOW_TYPE_FLAGS[cfg->window_type]);
-    if (win->window == NULL) {
+    if (win->window == NULL)
+    {
         log_sdl_error("SDL_CreateWindow failed");
         return -1;
     }
     win->renderer = SDL_CreateRenderer(win->window, -1, SDL_RENDERER_ACCELERATED);
-    if (win->renderer == NULL) {
+    if (win->renderer == NULL)
+    {
         SDL_DestroyWindow(win->window);
         log_sdl_error("SDL_CreateRenderer failed");
         return -1;
     }
     int const rc = SDL_SetRenderDrawColor(win->renderer, 0x00, 0x00, 0x00, 0xFF);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         SDL_DestroyWindow(win->window);
         SDL_DestroyRenderer(win->renderer);
         log_sdl_error("SDL_SetRenderDrawColor failed");
@@ -326,7 +347,8 @@ static struct window *window_create(struct config cfg[static 1], char const titl
 {
     struct window *const win = emalloc(sizeof(*win));
     int const rc = window_init(cfg, title, win);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         free(win);
         return NULL;
     }
@@ -356,7 +378,8 @@ static int get_rect(struct window win[static 1], SDL_Rect rect[static 1])
         return -1;
 
     int const rc = SDL_GetRendererOutputSize(win->renderer, &rect->w, &rect->h);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         log_sdl_error("SDL_GetRendererOutputSize failed");
         return -1;
     }
@@ -371,13 +394,15 @@ static int get_rect(struct window win[static 1], SDL_Rect rect[static 1])
 static SDL_Texture *create_texture(struct window win[static 1], char const path[static 1])
 {
     SDL_Surface *surface = SDL_LoadBMP(path);
-    if (surface == NULL) {
+    if (surface == NULL)
+    {
         log_sdl_error("SDL_LoadBMP failed");
         return NULL;
     }
     SDL_Texture *texture = SDL_CreateTextureFromSurface(win->renderer, surface);
     SDL_FreeSurface(surface);
-    if (texture == NULL) {
+    if (texture == NULL)
+    {
         log_sdl_error("SDL_CreateTextureFromSurface failed");
         return NULL;
     }
@@ -402,9 +427,12 @@ static int handle(void *data)
         },
     };
     int const rc = SDL_PushEvent(&event);
-    if (rc == 0) {
+    if (rc == 0)
+    {
         SDL_LogDebug(APP, "SDL_PushEvent filtered");
-    } else if (rc < 0) {
+    }
+    else if (rc < 0)
+    {
         log_sdl_error("SDL_PushEvent failed");
         return -1;
     }
@@ -417,7 +445,8 @@ static int handle(void *data)
 /// @param st The state.
 static void handle_keydown(SDL_KeyboardEvent *key, struct state *st)
 {
-    switch (key->keysym.sym) {
+    switch (key->keysym.sym)
+    {
     case SDLK_ESCAPE:
         st->loop_stat = 0;
         break;
@@ -448,8 +477,10 @@ static void handle_user(SDL_UserEvent *event, __attribute__((unused)) struct sta
 static void handle_events(struct state *st)
 {
     SDL_Event event = { 0 };
-    while (SDL_PollEvent(&event) != 0) {
-        switch (event.type) {
+    while (SDL_PollEvent(&event) != 0)
+    {
+        switch (event.type)
+        {
         case SDL_QUIT:
             st->loop_stat = 0;
             break;
@@ -476,12 +507,14 @@ static void update(__attribute__((unused)) double delta) { }
 static int render(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *win_rect)
 {
     int rc = SDL_RenderClear(renderer);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         log_sdl_error("SDL_RenderClear failed");
         return -1;
     }
     rc = SDL_RenderCopy(renderer, texture, NULL, win_rect);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         log_sdl_error("SDL_RenderCopy failed");
         return -1;
     }
@@ -496,7 +529,8 @@ static int render(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *win_re
 int init(void)
 {
     int rc = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         log_sdl_error("init failed");
         return -1;
     }
@@ -506,7 +540,8 @@ int init(void)
     perf_freq = SDL_GetPerformanceFrequency();
 
     uint32_t const event_start = SDL_RegisterEvents(EVENT_MAX - EVENT_0);
-    if (event_start == (uint32_t)-1) {
+    if (event_start == (uint32_t)-1)
+    {
         log_sdl_error("SDL_RegisterEvents failed");
         return -1;
     }
@@ -522,7 +557,8 @@ int init(void)
     };
     SDL_AudioSpec have = { 0 };
     st.audio_device = SDL_OpenAudioDevice(NULL, 0, &want, &have, 0);
-    if (st.audio_device < 2) {
+    if (st.audio_device < 2)
+    {
         log_sdl_error("SDL_OpenAudio failed");
         return -1;
     }
@@ -578,7 +614,8 @@ int main(int argc, char *argv[])
     uint64_t begin = now();
     uint64_t end = 0;
 
-    while (st.loop_stat == 1) {
+    while (st.loop_stat == 1)
+    {
         handle_events(&st);
 
         update(delta);

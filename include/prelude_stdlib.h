@@ -13,7 +13,8 @@
 static inline void *emalloc(size_t size)
 {
     void *ret = malloc(size);
-    if (ret == NULL) {
+    if (ret == NULL)
+    {
         (void)fprintf(stderr, ALLOCATION_FAILURE_MSG);
         exit(EXIT_FAILURE);
     }
@@ -28,7 +29,8 @@ static inline void *emalloc(size_t size)
 static inline void *ecalloc(size_t nmemb, size_t size)
 {
     void *ret = calloc(nmemb, size);
-    if (ret == NULL) {
+    if (ret == NULL)
+    {
         (void)fprintf(stderr, ALLOCATION_FAILURE_MSG);
         exit(EXIT_FAILURE);
     }

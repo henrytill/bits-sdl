@@ -18,8 +18,10 @@
 // Cleanup
 
 #define AT_EXIT(func)                                            \
-    do {                                                         \
-        if (atexit(func) != 0) {                                 \
+    do                                                           \
+    {                                                            \
+        if (atexit(func) != 0)                                   \
+        {                                                        \
             (void)fprintf(stderr, "atexit(%s) failed\n", #func); \
             exit(EXIT_FAILURE);                                  \
         }                                                        \
