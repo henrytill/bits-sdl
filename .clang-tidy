@@ -33,7 +33,7 @@ CheckOptions:
   - key: readability-identifier-naming.TypedefCase
     value: lower_case
 
-HeaderFilterRegex: 'include/*/*.h'
+HeaderFilterRegex: "include/*/*.h"
 # Local Variables:
 # mode: yaml
 # End:
